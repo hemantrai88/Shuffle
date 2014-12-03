@@ -81,9 +81,10 @@
 
                     $('#new_url').val('');
                     alert('Video was successfully added to your playlist');
+                    $.colorbox.close();
                 });
 
-                $(".inline").colorbox({inline:true, width:"50%"});
+                $(".inline").colorbox({inline:true, width:"50%", closeButton:true});
 
             });
         </script>
@@ -205,7 +206,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div style="float:left;">
-                    <object id="playback" width="900" height="450"  data="http://www.youtube.com/v/S14IHuVC0uE&autoplay=1" type="application/x-shockwave-flash"></object>
+                    <object id="playback" width="640" height="390"  data="http://www.youtube.com/v/S14IHuVC0uE&autoplay=1" type="application/x-shockwave-flash"></object>
                 </div>
                     <br />
                     <div id="playQueue" style="height:450px; float: right; width: 225px;">
