@@ -22,12 +22,71 @@
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <link href="http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
 
+        <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="js/classie.js"></script>
+    <script src="js/cbpAnimatedHeader.js"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="js/jqBootstrapValidation.js"></script>
+    <script src="js/contact_me.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/freelancer.js"></script>
+
+    <link rel="stylesheet" href="colorbox/colorbox.css" />
+    <script src="colorbox/jquery.colorbox.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+     <script>
+            $(document).ready(function(){
+                var playlist=[];
+                playlist[0]='Ahg6qcgoay4';
+                var i=1;
+                $('#nxt').click(function(){
+                    var playing=$('#playback').attr('data');
+                    var playing_id = playing.match(/v\/(.{11})/)[1];
+                    
+                    var play_index = playlist.indexOf(playing_id);
+                    //var next index = play_index+1;
+                    var next_play = playlist[++play_index];
+                    $("#playback").attr('data', "http://www.youtube.com/v/"+next_play+'&autoplay=1').hide().show();
+                    
+                    
+                });
+                
+                $('#addurl').click(function(){
+                    var url=$('#new_url').val();
+                    var video_id = url.match(/v=(.{11})/)[1];
+                    //playlist.push(video_id);
+                    playlist[i]=video_id;
+                    i++;
+                      $.post("get_video_details.php",{vid:video_id},function(result){
+                        var obj = jQuery.parseJSON(result);
+                        $("#playQueue ul").append('<li><a href="#">'+obj.title+'</a></li>');
+                        //alert(obj.title);
+                      });
+
+                    $('#new_url').val('');
+                    alert('Video was successfully added to your playlist');
+                });
+
+                $(".inline").colorbox({inline:true, width:"50%"});
+
+            });
+        </script>
 
 <style type="text/css">
 
@@ -117,7 +176,7 @@
                         <a href="#page-top"></a>
                     </li>
                     <li class="page-scroll">
-                        <a href="#portfolio">Portfolio</a>
+                        <a class='inline' href="#inline_content">Add Video</a>
                     </li>
                     <li class="page-scroll">
                         <a href="#about">About</a>
@@ -131,6 +190,14 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
+
+    <!-- This contains the hidden content for inline calls -->
+        <div style='display:none'>
+            <div id='inline_content' style='padding:10px; background:#fff;'>
+            <input type="text" id="new_url" />
+                    <button id="addurl">Add new video</button>
+            </div>
+        </div>
 
     <!-- Header -->
     <header>
@@ -150,8 +217,7 @@
                     <button id="prev">Previous</button>
                     <button id="nxt">Next</button>
                     <br /><br />
-                    <input type="text" id="new_url" />
-                    <button id="addurl">Add new video</button>
+                    
 
                     <div class="intro-text">
                         <span class="name">New Bootstrap</span>
@@ -595,58 +661,7 @@
         </div>
     </div>
 
-    <!-- jQuery -->
-    <script src="js/jquery.js"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="js/bootstrap.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
-    <script src="js/classie.js"></script>
-    <script src="js/cbpAnimatedHeader.js"></script>
-
-    <!-- Contact Form JavaScript -->
-    <script src="js/jqBootstrapValidation.js"></script>
-    <script src="js/contact_me.js"></script>
-
-    <!-- Custom Theme JavaScript -->
-    <script src="js/freelancer.js"></script>
-
-     <script>
-            $(document).ready(function(){
-                var playlist=[];
-                playlist[0]='Ahg6qcgoay4';
-                var i=1;
-                $('#nxt').click(function(){
-                    var playing=$('#playback').attr('data');
-                    var playing_id = playing.match(/v\/(.{11})/)[1];
-                    
-                    var play_index = playlist.indexOf(playing_id);
-                    //var next index = play_index+1;
-                    var next_play = playlist[++play_index];
-                    $("#playback").attr('data', "http://www.youtube.com/v/"+next_play+'&autoplay=1').hide().show();
-                    
-                    
-                });
-                
-                $('#addurl').click(function(){
-                    var url=$('#new_url').val();
-                    var video_id = url.match(/v=(.{11})/)[1];
-                    //playlist.push(video_id);
-                    playlist[i]=video_id;
-                    i++;
-                      $.post("get_video_details.php",{vid:video_id},function(result){
-                        var obj = jQuery.parseJSON(result);
-                        $("#playQueue ul").append('<li><a href="#">'+obj.title+'</a></li>');
-                        //alert(obj.title);
-                      });
-
-                    $('#new_url').val('');
-                    alert('Video was successfully added to your playlist');
-                });
-            });
-        </script>
 
 </body>
 
