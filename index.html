@@ -84,7 +84,7 @@
                     $.colorbox.close();
                 });
 
-                $(".inline").colorbox({inline:true, width:"50%", closeButton:true});
+                $(".inline").colorbox({inline:true, width:"25%", closeButton:true,transition:"none", top:"7%", right:"10%",opacity:0.5});
 
             });
         </script>
@@ -150,6 +150,25 @@
     margin-top: -5%;
 }
 
+#new_url{
+	border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px #ddd inset;
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 0.5em 0.6em;
+    width: 80%;
+}
+
+#add_you{
+	border-bottom: 1px solid #e5e5e5;
+    color: #333;
+    display: block;
+    margin-bottom: 0.3em;
+    padding: 0.3em 0;
+    width: 100%;
+}
+
 </style>
 
 </head>
@@ -194,9 +213,13 @@
 
     <!-- This contains the hidden content for inline calls -->
         <div style='display:none'>
-            <div id='inline_content' style='padding:10px; background:#fff;'>
-            <input type="text" id="new_url" />
-                    <button id="addurl">Add new video</button>
+            <div id='inline_content' style='padding:10px;'>
+            	<label id="add_you">Paste the Youtube URL here</label>
+            	<br />
+            	<input type="text" id="new_url" />
+            	<img id="addurl" src="img/plus.png" class="img-responsive" alt="" style="height: 35px; width: 35px; display: inline; margin-left: 5%; margin-top: -2%;">
+            	<!-- <button id="addurl">Add new video</button> -->
+            	<br />
             </div>
         </div>
 
@@ -205,8 +228,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div style="float:left;">
+                    <div style="float:left;background-color: #aaa; height: 480px; padding-top: 3%; width: 700px;">
                     <object id="playback" width="640" height="390"  data="http://www.youtube.com/v/S14IHuVC0uE&autoplay=1" type="application/x-shockwave-flash"></object>
+                    <br />
+                    <img id="pause" src="img/pause.png" class="img-responsive" alt="" style="float: left; height: 50px; margin-left: 5%; width: 50px;">
+                    <img id="nxt" src="img/next.png" class="img-responsive" alt="" style="float: left; height: 40px; margin-left: 5%; margin-top: 1%; width: 40px;">
                 </div>
                     <br />
                     <div id="playQueue" style="height:450px; float: right; width: 225px;">
@@ -214,16 +240,12 @@
                             <li><a href="#">Travis - My Eyes (Official Video)</a></li>
                         </ul>
                     </div>
-
-                    <button id="prev">Previous</button>
-                    <button id="nxt">Next</button>
+					<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
                     <br /><br />
                     
 
                     <div class="intro-text">
-                        <span class="name">New Bootstrap</span>
-                        <hr class="star-light">
-                        <span class="skills">Web Developer - Graphic Artist - User Experience Designer</span>
+                        <!-- <hr class="star-light"> -->
                     </div>
                 </div>
             </div>
