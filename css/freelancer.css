@@ -6,6 +6,7 @@
 
 body {
     overflow-x: hidden;
+    scrollbar-face-color: #aaa;
 }
 
 p {
