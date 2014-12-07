@@ -57,16 +57,49 @@
      <script>
             $(document).ready(function(){
                 var playlist=[];
-                playlist[0]='Ahg6qcgoay4';
-                var i=1;
-                $('#nxt').click(function(){
+                var details=[];
+                var playing_det='';
+                var next_det='';
+                //playlist[0]='Ahg6qcgoay4';
+                var i=0;
+                $('#p_next').click(function(){
                     var playing=$('#playback').attr('data');
                     var playing_id = playing.match(/v\/(.{11})/)[1];
                     
                     var play_index = playlist.indexOf(playing_id);
-                    //var next index = play_index+1;
-                    var next_play = playlist[++play_index];
+                    var next_index = ++play_index;
+                    var next_play = playlist[next_index];
                     $("#playback").attr('data', "http://www.youtube.com/v/"+next_play+'&autoplay=1').hide().show();
+                    var current=details[next_index];
+                    var next=details[next_index+1];
+                    console.log(current);
+                    console.log(next);
+                    playing_det='<div id="playing_now"><div class="playing_label">Now Playing</div><img src="'+current.thumbnail_url+'" class="vid_thumb"><div class="now_title">'+current.title+'<br />Author: '+current.author_name+'</div></div>';
+                    
+                    if(next_index!=i-1){
+                    	next_det='<div id="playing_next" style="display:none;"><div class="playing_next_label">Next</div><img src="'+next.thumbnail_url+'" class="vid_thumb"><div class="now_title">'+next.title+'<br />Author: '+next.author_name+'</div></div>';
+                    	$('#now_playing').html(playing_det+next_det);
+                    }else{
+                    	$('#now_playing').html(playing_det);
+                    }
+                    
+
+                    
+                    $('#playing_top').html(current.title);
+                    
+                    if(next_index!=i-1){
+                    	
+                    	 var $or = $("#playing_now"),
+					         $bl = $("#playing_next"),
+					         togglePlaying;
+                    	
+                    	togglePlaying = function() {
+							$or.toggle();
+							$bl.toggle();
+						};
+						
+					 setInterval(togglePlaying, 10000);
+                    }
                     
                     
                 });
@@ -76,16 +109,45 @@
                     var video_id = url.match(/v=(.{11})/)[1];
                     //playlist.push(video_id);
                     playlist[i]=video_id;
-                    i++;
+                    //i++;
                       $.post("get_video_details.php",{vid:video_id},function(result){
                         var obj = jQuery.parseJSON(result);
+                        details[i]=obj;
                         $("#playQueue ul").append('<li><a href="#">'+obj.title+'</a></li>');
-                        //alert(obj.title);
+                        if($('#start_screen').is(':visible')) {
+                        	playing_det='<div id="playing_now"><div class="playing_label">Now Playing</div><img src="'+obj.thumbnail_url+'" class="vid_thumb"><div class="now_title">'+obj.title+'<br />Author: '+obj.author_name+'</div></div>';
+                        	$('#playing_top').html(obj.title);
+                        	$('#now_playing').html(playing_det);
+                        }
+                        if(i==1){
+                        	next_det='<div id="playing_next" style="display:none;"><div class="playing_next_label">Next</div><img src="'+obj.thumbnail_url+'" class="vid_thumb"><div class="now_title">'+obj.title+'<br />Author: '+obj.author_name+'</div></div>';
+                        	$('#now_playing').html(playing_det+next_det);
+                        	
+                        	var $or = $("#playing_now"),
+					            $bl = $("#playing_next"),
+					            togglePlaying;
+                    	
+	                    	togglePlaying = function() {
+								$or.toggle();
+								$bl.toggle();
+							};
+						
+					 		setInterval(togglePlaying, 10000);
+                        	
+                        }
                       });
 
                     $('#new_url').val('');
                     alert('Video was successfully added to your playlist');
                     $.colorbox.close();
+                    if($('#start_screen').is(':visible')) {
+		                    $('#start_screen').hide();
+		                    var first_play = playlist[0];
+		                    $("#playback").attr('data', "http://www.youtube.com/v/"+first_play+'&autoplay=1').hide().show();
+                    }
+                    
+                    
+              i++;      
                 });
 
                 $(".inline").colorbox({inline:true, width:"25%", closeButton:true,transition:"none", top:"7%", right:"10%",opacity:0.5});
@@ -139,16 +201,19 @@
   margin-right:0;
 }
 #playQueue ul li a{
-  background:#0088cb;
+  background:#00628B;
   display:block;
   width:100%;
   padding:25px 0;
   text-decoration:none;
   transition: 0.4s;
   color:#fff;
+  font-weight: bold;
 }
 #playQueue ul li a:hover{
-  background:#cf5;
+  background:#ffffff;
+  color: #00628B;
+  font-weight: bold;
 }
 
 /*::-webkit-scrollbar {
@@ -166,9 +231,9 @@
 }*/
 
 
-.row{
+/*.row{
     margin-top: -5%;
-}
+}*/
 
 #new_url{
 	border: 1px solid #ccc;
@@ -188,6 +253,57 @@
     padding: 0.3em 0;
     width: 100%;
 }
+
+#playback{
+	margin-bottom: 2%;
+}
+
+.vid_thumb{
+	width:60px;
+	height:60px;
+	display: inline;
+}
+
+#now_playing{
+	margin-left: 15%;
+    margin-top: -1.5%;
+}
+
+.now_title{
+	display: inline;
+	float: right;
+    margin-right: 12%;
+    margin-top: -2%;
+    text-align: left;
+    font-weight:bold;
+}
+
+.playing_label{
+	background-color: #00628b;
+    float: left;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-left: 17%;
+    margin-top: -3%;
+    padding-left: 0.5%;
+    padding-right: 1%;
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+}
+
+.playing_next_label{
+	background-color: #00628b;
+    float: left;
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-left: 17%;
+    margin-top: -3%;
+    padding-left: 3.5%;
+    padding-right: 4%;
+    transform: rotate(90deg);
+    transform-origin: left top 0;
+}
+
 
 /*#playQueue::-webkit-scrollbar-track
 {
@@ -270,16 +386,26 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <div style="float:left;background-color: #aaa; height: 480px; padding-top: 3%; width: 700px;">
-                    <object id="playback" width="640" height="390"  data="http://www.youtube.com/v/S14IHuVC0uE&autoplay=1" type="application/x-shockwave-flash"></object>
-                    <br />
-                    <img id="pause" src="img/pause.png" class="img-responsive" alt="" style="float: left; height: 50px; margin-left: 5%; width: 50px;">
-                    <img id="nxt" src="img/next.png" class="img-responsive" alt="" style="float: left; height: 40px; margin-left: 5%; margin-top: 1%; width: 40px;">
+                    <div style="float:left;background-color: #393939; height: 30em; padding: 1% 0; width: 65%; border-radius: 1em;">
+                    	<div id="playing_top"></div>
+                    	<div id="start_screen" style="width:98%; height:80%; background-color: #e6e6dc; margin-left: 1%;">
+                    		
+                    	</div>
+	                    <object id="playback" width="100%" height="80%" style="display: none;"  data="http://www.youtube.com/v/S14IHuVC0uE&autoplay=1" type="application/x-shockwave-flash"></object>
+	                    <br />
+	                    <img id="p_prev" src="img/p_prev.png" class="img-responsive" alt="" style="float: left; margin-left: 5%; background-color: #fff; border-radius: 1em; ">
+	                    <img id="p_play" src="img/p_play.png" class="img-responsive" alt="" style="float: left; margin-left: 5%; background-color: #fff; border-radius: 1em;">
+	                    <img id="p_next" src="img/p_next.png" class="img-responsive" alt="" style="float: left; margin-left: 5%; background-color: #fff; border-radius: 1em;">
+	                    <img id="p_stop" src="img/p_stop.png" class="img-responsive" alt="" style="float: left; margin-left: 5%; background-color: #fff; border-radius: 1em;">
+	                    <div id="now_playing">
+	                    	
+	                    	
+	                    </div>
                 </div>
                     <br />
                     <div id="playQueue" style="">
                         <ul id="vidList">
-                            <li><a href="#">Travis - My Eyes (Official Video)</a></li>
+                            <!-- <li><a href="#">Travis - My Eyes (Official Video)</a></li> -->
                         </ul>
                     </div>
 					<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
