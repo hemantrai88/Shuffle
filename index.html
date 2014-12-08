@@ -55,7 +55,55 @@
     <![endif]-->
 
      <script>
+     
+    //Load player api asynchronously.
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var done = false;
+    var player;
+    
+    function onYouTubeIframeAPIReady() {
+
+    }    
+
+     function onPlayerReady(evt) {
+         evt.target.playVideo();
+     }
+    function onPlayerStateChange(evt) {
+        // if (evt.data == YT.PlayerState.PLAYING && !done) {
+            // setTimeout(stopVideo, 6000);
+            // done = true;
+        // }
+    }
+    function stopVideo() {
+        player.stopVideo();
+    }
+
+    function pauseVideo(){
+      player.pauseVideo();
+    }
+    
+    function playVideo(vid){
+    	console.log('IN');
+    	player = new YT.Player('player', {
+          height: '390',
+          width: '640',
+          videoId: vid,
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+    	//player.playVideo();
+    	//player.loadVideoById(vid, 0, "large");
+    }
+     
             $(document).ready(function(){
+            	
+            	//$('#player').hide();
+            	
                 var playlist=[];
                 var details=[];
                 var playing_det='';
@@ -142,8 +190,12 @@
                     $.colorbox.close();
                     if($('#start_screen').is(':visible')) {
 		                    $('#start_screen').hide();
+		                    $('#player').show();
 		                    var first_play = playlist[0];
-		                    $("#playback").attr('data', "http://www.youtube.com/v/"+first_play+'&autoplay=1').hide().show();
+		                    playVideo(first_play);
+		                    //player.loadVideoById(first_play, 0, "medium");
+		                    //player.target.cueVideoById(first_play, 0, "medium");
+		                    //$("#playback").attr('data', "http://www.youtube.com/v/"+first_play+'&autoplay=1').hide().show();
                     }
                     
                     
@@ -391,7 +443,8 @@
                     	<div id="start_screen" style="width:98%; height:80%; background-color: #e6e6dc; margin-left: 1%;">
                     		
                     	</div>
-	                    <object id="playback" width="100%" height="80%" style="display: none;"  data="http://www.youtube.com/v/S14IHuVC0uE&autoplay=1" type="application/x-shockwave-flash"></object>
+                    	<div id="player"></div>
+	                    
 	                    <br />
 	                    <img id="p_prev" src="img/p_prev.png" class="img-responsive" alt="" style="float: left; margin-left: 5%; background-color: #fff; border-radius: 1em; ">
 	                    <img id="p_play" src="img/p_play.png" class="img-responsive" alt="" style="float: left; margin-left: 5%; background-color: #fff; border-radius: 1em;">
